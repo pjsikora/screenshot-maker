@@ -1,0 +1,16 @@
+{
+  "name": "makescreenshot",
+  "version": "1.0.0",
+  "description": "BackEnd based on Node.js / Express.js for making screenshots",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "fs": "0.0.2",
+    "webshot": "^0.18.0"
+  }
+}
