@@ -3,39 +3,40 @@ var app = express();
 var webshot = require('webshot');
 var fs = require('fs');
 
+
+// Where screenshots needs to be stored
+var screenShotDestinationURL = 'screenshots';
+
+
+// Test routing
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.send('Quick test');
 });
 
-app.get('/screenshot', function(req, res) {
-  console.log('/screenshot');
-  // console.log(req);
-  var screenWidth = req.query.screenWidth || 1200,
-      screenHeight = req.query.screenHeight || 'all',
-      url = req.query.url,
-      file = req.query.file,
-      group = req.query.group,
 
-      screenShotDestinationURL = '/screenshots',
+// Make screenshot
+app.get('/screenshot', function(req, res) {
+  var url = req.query.url,
 
       options = {
+          renderDelay: 2000,
           screenSize: {
-              width: 2000,
+              width: req.query.screenWidth || 1000,
               height: 480
           },
           shotSize: {
-              width: 2000,
+              width: req.query.screenWidth || 1000,
               height: 'all'
-          }
-          // , userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
+          },
+          userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
       };
 
       if (typeof url === undefined || typeof url === "undefined") {
         res.json({status: 'ERROR', msg: 'no url'});
       } else {
-        var fileDestination = 'screenshots/'+ Date.now() +'-'+url;
+        var fileDestination = 'screenshots/'+ Date.now() +'-'+url+'.png';
 
-        webshot(url, 'screenshots/'+ Date.now() +'-google.png', function(err) {
+        webshot(url, fileDestination, options, function(err) {
           if (err) {
               res.json({status: 'ERROR', msg: err});
           } else {
@@ -43,14 +44,18 @@ app.get('/screenshot', function(req, res) {
           }
         });
       }
+});
 
 
+// List all files in the directory
+app.get('/list', function(req, res) {
+  fs.readdir(screenShotDestinationURL, function(err, items) {
+      res.json({status: 'OK', files: items});
+  });
+});
 
 
-
-  //res.send('Screenshot');
-})
-
+// Run app
 app.listen(8888, function () {
-  console.log('Example app listening on port 8888!');
+  console.log('localhost:8888!');
 });
