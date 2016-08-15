@@ -1,5 +1,5 @@
 # Make a simple screenshots of website
-Just a simple API to make a screenshots of websites
+Just a simple API to make a screenshots of websites.
 
 # Usage
 Run in command line:

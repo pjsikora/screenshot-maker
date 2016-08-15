@@ -7,11 +7,12 @@ var fs = require('fs');
 // Where screenshots needs to be stored
 var screenShotDestinationURL = 'screenshots';
 
+app.use(express.static(__dirname + '/fe-vue'));
 
 // Test routing
-app.get('/', function (req, res) {
-  res.send('Quick test');
-});
+// app.get('/', function (req, res) {
+//   res.send('Quick test');
+// });
 
 
 // Make screenshot
@@ -46,6 +47,29 @@ app.get('/screenshot', function(req, res) {
       }
 });
 
+// Get screenshot
+app.get('/get/:id', function(req, res) {
+  console.log(req.params.id);
+
+  var urlID = req.params.id,
+      file = "screenshots/" + urlID;
+
+  // Check if file exists
+  if (fs.existsSync(file)) {
+      // File exists so lets bring the base64 from it
+      fs.readFile(file, function (err, original_data) {
+          var base64Image = original_data.toString('base64');
+
+          res.send(base64Image);
+          // res.send('<img src="data:image/png;base64,' + base64Image + '"/>');
+      });
+  } else {
+      // File doesnt exist - lets throw an error
+      res.json({status: "ERRROR", msg: "File doesnt exists"});
+  }
+
+  // res.json({status: 'OK'})
+});
 
 // List all files in the directory
 app.get('/list', function(req, res) {
