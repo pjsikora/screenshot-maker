@@ -1,2 +1,8 @@
 node_modules
 screenshots/*
+
+
+app/config.js
+public
+
+.idea

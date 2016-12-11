@@ -26,3 +26,17 @@ Example
 ```
 localhost:8888/list?url=fedojo.com
 ```
+
+
+## Projects
+
+
+### List projects
+```
+http://localhost:8888/api/project/list
+```
+
+### Create project
+```
+http://localhost:8888/api/project/create?name=First&createdBy=Piotr
+```
