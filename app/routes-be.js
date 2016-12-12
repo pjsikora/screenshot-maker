@@ -11,7 +11,7 @@ router.get('/screenshot/read/:id', ScreenshotCtrl.read);
 
 router.get('/project/create', ProjectCtrl.create);
 router.get('/project/list', ProjectCtrl.listAll);
-router.get('/project/read/:id', ProjectCtrl.readProject);
+router.get('/project/read', ProjectCtrl.readProject);
 router.get('/project/update', ProjectCtrl.update);
 router.get('/project/delete/:id', ProjectCtrl.projectDelete);
 

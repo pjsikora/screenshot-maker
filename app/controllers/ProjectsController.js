@@ -22,9 +22,16 @@ var ProjectCtrl = {
     },
 
     readProject: function (req, res) {
-        // var id = req.query.id || req.body.id;
-        var id = req.body.id;
-        console.log(id);
+        var _gp;
+
+        if (req.method === "GET") {
+            _gp = req.query;
+        } else { // if POST
+            _gp = req.body;
+        }
+
+        var id = _gp._id;
+
 
         Project.findOne({_id: id}, function (err, projects) {
             if (err) {
@@ -48,7 +55,7 @@ var ProjectCtrl = {
         var project = new Project();
 
         project.name = _gp.name;
-        project.createdBy = _gp.createdBy;
+        // project.createdBy = _gp.createdBy;
         project.isOpened = _gp.isOpened;
 
         project.save(function (err) {

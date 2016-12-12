@@ -4,7 +4,16 @@ var fs = require('fs');
 
 var Screenshot = {
     create: function (req, res) {
-        var url = req.query.url,
+        var _gp;
+
+        if (req.method === "GET") {
+            _gp = req.query;
+        } else {
+            _gp = req.body;
+        }
+
+        var url = _gp.url,
+            projectID = _gp.projectID,
 
             options = {
                 renderDelay: 2000,
@@ -22,13 +31,13 @@ var Screenshot = {
         if (typeof url === undefined || typeof url === "undefined") {
             res.json({status: 'ERROR', msg: 'no url'});
         } else {
-            var fileDestination = 'screenshots/' + Date.now() + '-' + url + '.png';
+            var fileDestination = 'screenshots/'+ projectID + '/' + Date.now() + '-' + url + '.png';
 
             webshot(url, fileDestination, options, function (err) {
                 if (err) {
                     res.json({status: 'ERROR', msg: err});
                 } else {
-                    res.json({status: 'OK'});
+                    res.json({status: 'OK', fileDestination: fileDestination});
                 }
             });
         }

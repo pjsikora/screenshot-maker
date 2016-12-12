@@ -15,7 +15,7 @@ var ProjectSchema = new Schema({
     },
     createdBy: {
         type: String,
-        required: true
+        // required: true
     },
     isOpened: {
         type: Boolean,
