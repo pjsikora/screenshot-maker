@@ -55,7 +55,6 @@ var ProjectCtrl = {
         var project = new Project();
 
         project.name = _gp.name;
-        // project.createdBy = _gp.createdBy;
         project.isOpened = _gp.isOpened;
 
         project.save(function (err) {
@@ -68,41 +67,32 @@ var ProjectCtrl = {
     },
 
     update: function (req, res) {
-        // var projectID = req.query._id || req.body._id,
-        var projectID = req.body._id,
+        var _gp;
+
+        if (req.method === "GET") {
+            _gp = req.query;
+        } else {
+            _gp = req.body;
+        }
+
+        var projectID = _gp._id,
             newProjectData = {};
 
-        // if (req.query.name || req.body.name) {
-        //     newProjectData.name = req.query.name || req.body.name;
-        // }
-        // if (req.query.description || req.body.description) {
-        //     newProjectData.description = req.query.description || req.body.description;
-        // }
-        // if (req.query.createDate || req.body.createDate) {
-        //     newProjectData.createDate = req.query.createDate || req.body.createDate;
-        // }
-        // if (req.query.createdBy || req.body.createdBy) {
-        //     newProjectData.createdBy = req.query.createdBy || req.body.createdBy;
-        // }
-        // if (req.query.isOpened || req.body.isOpened) {
-        //     newProjectData.isOpened = req.query.isOpened || req.body.isOpened;
-        // }
 
-
-        if (req.body.name) {
-            newProjectData.name = req.body.name;
+        if (_gp.name) {
+            newProjectData.name = _gp.name;
         }
-        if (req.body.description) {
-            newProjectData.description = req.body.description;
+        if (_gp.description) {
+            newProjectData.description = _gp.description;
         }
-        if (req.body.createDate) {
-            newProjectData.createDate = req.body.createDate;
+        if (_gp.createDate) {
+            newProjectData.createDate = _gp.createDate;
         }
-        if (req.body.createdBy) {
-            newProjectData.createdBy = req.body.createdBy;
+        if (_gp.createdBy) {
+            newProjectData.createdBy = _gp.createdBy;
         }
-        if (req.body.isOpened) {
-            newProjectData.isOpened = req.body.isOpened;
+        if (_gp.isOpened) {
+            newProjectData.isOpened = _gp.isOpened;
         }
 
         var query = {_id: projectID},

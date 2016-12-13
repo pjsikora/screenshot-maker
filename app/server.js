@@ -15,6 +15,7 @@ app.use('/api/', apiRoutes);
 
 console.log(config.db.mongodb);
 
+mongoose.Promise = global.Promise;
 mongoose.connect(config.db.mongodb, function(err) {
     if (err) throw err;
 });

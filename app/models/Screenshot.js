@@ -15,7 +15,7 @@ var ScreenshotSchema = new Schema({
     },
     createdBy: {
         type: String,
-        required: true
+        // required: true
     },
     isOpened: {
         type: Boolean,
@@ -24,7 +24,14 @@ var ScreenshotSchema = new Schema({
     isDeleted: {
         type: Boolean,
         default: false
+    },
+    projectID: {
+        type: String
+    },
+    fileURL: {
+        type: String
     }
+
 });
 
 module.exports = mongoose.model('Screenshot', ScreenshotSchema);

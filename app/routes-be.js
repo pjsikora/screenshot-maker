@@ -6,7 +6,8 @@ var ProjectCtrl = require('./controllers/ProjectsController');
 
 
 router.get('/screenshot/create', ScreenshotCtrl.create);
-router.get('/screenshot/read/:id', ScreenshotCtrl.read);
+router.get('/screenshot/read', ScreenshotCtrl.read);
+router.get('/screenshot/list', ScreenshotCtrl.listAll);
 
 
 router.get('/project/create', ProjectCtrl.create);

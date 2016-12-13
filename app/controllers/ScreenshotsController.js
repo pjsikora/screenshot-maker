@@ -1,8 +1,33 @@
 var webshot = require('webshot');
 var fs = require('fs');
+var Screenshot = require('../models/Screenshot');
 
 
-var Screenshot = {
+var ScreenshotController = {
+    listAllUndeleted: function (req, res) {
+        Screenshot.find({isDeleted: false}, function (err, screenshots) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json(screenshots);
+            }
+        });
+    }
+
+    ,
+
+    listAll: function (req, res) {
+        Screenshot.find({}, function (err, screenshots) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json(screenshots);
+            }
+        });
+    }
+
+    ,
+
     create: function (req, res) {
         var _gp;
 
@@ -31,13 +56,26 @@ var Screenshot = {
         if (typeof url === undefined || typeof url === "undefined") {
             res.json({status: 'ERROR', msg: 'no url'});
         } else {
-            var fileDestination = 'screenshots/'+ projectID + '/' + Date.now() + '-' + url + '.png';
+            var fileDestination = 'screenshots/' + projectID + '/' + Date.now() + '-' + url + '.png';
 
             webshot(url, fileDestination, options, function (err) {
                 if (err) {
                     res.json({status: 'ERROR', msg: err});
                 } else {
-                    res.json({status: 'OK', fileDestination: fileDestination});
+                    var screenshot = new Screenshot();
+
+                    screenshot.name = _gp.name || Date.now() + '-' + url + '.png';
+                    screenshot.description = _gp.description;
+                    screenshot.projectID = projectID;
+                    screenshot.fileURL = fileDestination;
+
+                    screenshot.save(function (err) {
+                        if (err) {
+                            res.json({status: 'ERROR', error: JSON.stringify(err)});
+                        } else {
+                            res.json({status: 'OK', fileDestination: fileDestination});
+                        }
+                    });
                 }
             });
         }
@@ -46,27 +84,58 @@ var Screenshot = {
     ,
 
     read: function (req, res) {
-        console.log(req.params.id);
+        var _gp;
 
-        var urlID = req.params.id,
-            file = "screenshots/" + urlID;
-
-        // Check if file exists
-        if (fs.existsSync(file)) {
-            // File exists so lets bring the base64 from it
-            fs.readFile(file, function (err, original_data) {
-                var base64Image = original_data.toString('base64');
-
-                res.send(base64Image);
-                // res.send('<img src="data:image/png;base64,' + base64Image + '"/>');
-            });
+        if (req.method === "GET") {
+            _gp = req.query;
         } else {
-            // File doesnt exist - lets throw an error
-            res.json({status: "ERRROR", msg: "File doesnt exists"});
+            _gp = req.body;
         }
 
+        var urlID = _gp.id,
+            file = "screenshots/" + urlID,
+            projectID = _gp.projectID;
+
+
+        Screenshot.find({projectID: projectID}, function (err, screenshots) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json(screenshots);
+            }
+        });
+
+        // Check if file exists
+        // if (fs.existsSync(file)) {
+        //     // File exists so lets bring the base64 from it
+        //     fs.readFile(file, function (err, original_data) {
+        //         var base64Image = original_data.toString('base64');
+        //
+        //         res.send(base64Image);
+        //         // res.send('<img src="data:image/png;base64,' + base64Image + '"/>');
+        //     });
+        // } else {
+        //     // File doesnt exist - lets throw an error
+        //     res.json({status: "ERRROR", msg: "File doesnt exists"});
+        // }
         // res.json({status: 'OK'})
+    }
+
+    ,
+
+    getScreenshotsByProject: function (req, res) {
+        var _gp;
+
+        if (req.method === "GET") {
+            _gp = req.query;
+        } else {
+            _gp = req.body;
+        }
+
+        var projectID = _gp.projectID;
+
+
     }
 }
 
-module.exports = Screenshot;
+module.exports = ScreenshotController;
