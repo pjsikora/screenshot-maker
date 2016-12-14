@@ -1,3 +1,4 @@
+var CH = require('../helpers/ControllerHelper');
 var Project = require('../models/Project');
 
 var ProjectCtrl = {
@@ -22,16 +23,8 @@ var ProjectCtrl = {
     },
 
     readProject: function (req, res) {
-        var _gp;
-
-        if (req.method === "GET") {
-            _gp = req.query;
-        } else { // if POST
-            _gp = req.body;
-        }
-
+        var _gp = CH.m2v(req);
         var id = _gp._id;
-
 
         Project.findOne({_id: id}, function (err, projects) {
             if (err) {
@@ -44,14 +37,7 @@ var ProjectCtrl = {
 
 
     create: function (req, res) {
-        var _gp;
-
-        if (req.method === "GET") {
-            _gp = req.query;
-        } else {
-            _gp = req.body;
-        }
-
+        var _gp = CH.m2v(req);
         var project = new Project();
 
         project.name = _gp.name;
@@ -67,17 +53,9 @@ var ProjectCtrl = {
     },
 
     update: function (req, res) {
-        var _gp;
-
-        if (req.method === "GET") {
-            _gp = req.query;
-        } else {
-            _gp = req.body;
-        }
-
-        var projectID = _gp._id,
-            newProjectData = {};
-
+        var _gp = CH.m2v(req);
+        var projectID = _gp._id;
+        var newProjectData = {};
 
         if (_gp.name) {
             newProjectData.name = _gp.name;
@@ -95,8 +73,8 @@ var ProjectCtrl = {
             newProjectData.isOpened = _gp.isOpened;
         }
 
-        var query = {_id: projectID},
-            newData = newProjectData;
+        var query = {_id: projectID};
+        var newData = newProjectData;
 
         Project.findOneAndUpdate(query, newData, {upsert: true}, function (err, doc) {
             if (err) {
@@ -108,7 +86,9 @@ var ProjectCtrl = {
     },
 
     projectHardDelete: function (req, res) {
-        Project.remove({_id: req.body._id}, function (err) {
+        var _gp = CH.m2v(req);
+
+        Project.remove({_id: _gp._id}, function (err) {
             if (err) {
                 res.json({
                     status: 'ERROR'
@@ -122,14 +102,14 @@ var ProjectCtrl = {
     },
 
     projectDelete: function (req, res) {
-        // var viewID = req.query._id || req.body._id,
-        var viewID = req.body._id,
-            query = {
-                _id: viewID
-            },
-            newData = {
-                isDeleted: true
-            };
+        var _gp = CH.m2v(req);
+        var viewID = _gp._id;
+        var query = {
+            _id: viewID
+        };
+        var newData = {
+            isDeleted: true
+        };
 
         Project.findOneAndUpdate(query, newData, {upsert: true}, function (err, doc) {
             if (err) {

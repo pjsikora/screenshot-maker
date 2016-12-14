@@ -1,6 +1,7 @@
 var webshot = require('webshot');
 var fs = require('fs');
 var Screenshot = require('../models/Screenshot');
+var CH = require('../helpers/ControllerHelper');
 
 
 var ScreenshotController = {
@@ -29,29 +30,21 @@ var ScreenshotController = {
     ,
 
     create: function (req, res) {
-        var _gp;
-
-        if (req.method === "GET") {
-            _gp = req.query;
-        } else {
-            _gp = req.body;
-        }
-
-        var url = _gp.url,
-            projectID = _gp.projectID,
-
-            options = {
-                renderDelay: 2000,
-                screenSize: {
-                    width: req.query.screenWidth || 1000,
-                    height: 480
-                },
-                shotSize: {
-                    width: req.query.screenWidth || 1000,
-                    height: 'all'
-                },
-                userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
-            };
+        var _gp = CH.m2v(req);
+        var url = _gp.url;
+        var projectID = _gp.projectID;
+        var options = {
+            renderDelay: 2000,
+            screenSize: {
+                width: _gp.screenWidth || 1000,
+                height: 480
+            },
+            shotSize: {
+                width: _gp.screenWidth || 1000,
+                height: 'all'
+            },
+            userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
+        };
 
         if (typeof url === undefined || typeof url === "undefined") {
             res.json({status: 'ERROR', msg: 'no url'});
@@ -84,18 +77,10 @@ var ScreenshotController = {
     ,
 
     read: function (req, res) {
-        var _gp;
-
-        if (req.method === "GET") {
-            _gp = req.query;
-        } else {
-            _gp = req.body;
-        }
-
-        var urlID = _gp.id,
-            file = "screenshots/" + urlID,
-            projectID = _gp.projectID;
-
+        var _gp = CH.m2v(req);
+        var urlID = _gp.id;
+        var file = "screenshots/" + urlID;
+        var projectID = _gp.projectID;
 
         Screenshot.find({projectID: projectID}, function (err, screenshots) {
             if (err) {
@@ -124,14 +109,7 @@ var ScreenshotController = {
     ,
 
     getScreenshotsByProject: function (req, res) {
-        var _gp;
-
-        if (req.method === "GET") {
-            _gp = req.query;
-        } else {
-            _gp = req.body;
-        }
-
+        var _gp = CH.m2v(req);
         var projectID = _gp.projectID;
 
 
