@@ -26,20 +26,35 @@ var UserController = {
                     // create a token
                     var token = jwt.sign(user, CFG.secret, {
                         expiresIn: 3000,
-                        // expiresInMinutes: 1440 // expires in 24 hours
                     });
 
                     // return the information including token as JSON
                     res.json({
                         success: true,
                         message: 'Enjoy your token!',
-                        token: token
+                        token: token,
+                        userID: user._id
                     });
                 }
 
             }
 
         });
+    },
+
+    register: function(req, res) {
+        var _gp = CH.m2v(req);
+        var user = new User();
+
+        user.name = _gp.name;
+        user.password = _gp.password;
+
+        user.save(function() {
+            res.json({
+                success: true,
+                message: 'User created'
+            });
+        })
     }
 
     // listAllUndeleted: function (req, res) {
