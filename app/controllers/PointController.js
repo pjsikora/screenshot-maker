@@ -95,7 +95,9 @@ var points = {
     },
 
     deleteHard: function (req, res) {
-        Point.remove({_id: req.body._id}, function (err) {
+        var _gp = CH.m2v(req);
+
+        Point.remove({_id: _gp._id}, function (err) {
             if (err) {
                 res.json({
                     status: 'ERROR',

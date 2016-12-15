@@ -43,11 +43,11 @@ var ProjectCtrl = {
         project.name = _gp.name;
         project.isOpened = _gp.isOpened;
 
-        project.save(function (err) {
+        project.save(function (err, el) {
             if (err) {
                 res.json({status: 'ERROR', error: JSON.stringify(err)});
             } else {
-                res.json({status: 'OK'});
+                res.json({status: 'OK', _id: el._id});
             }
         });
     },

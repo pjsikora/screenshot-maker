@@ -1,7 +1,7 @@
-var mongoose     = require('mongoose');
-var Schema       = mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-var PointSchema   = new Schema({
+var PointSchema = new Schema({
     name: String,
     description: String,
     x: {

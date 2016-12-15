@@ -3,7 +3,6 @@ var fs = require('fs');
 var Screenshot = require('../models/Screenshot');
 var CH = require('../helpers/ControllerHelper');
 
-
 var ScreenshotController = {
     listAllUndeleted: function (req, res) {
         Screenshot.find({isDeleted: false}, function (err, screenshots) {
@@ -33,8 +32,9 @@ var ScreenshotController = {
         var _gp = CH.m2v(req);
         var url = _gp.url;
         var projectID = _gp.projectID;
+
         var options = {
-            renderDelay: 2000,
+            renderDelay: _gp.renderDelay || 500,
             screenSize: {
                 width: _gp.screenWidth || 1000,
                 height: 480
@@ -78,7 +78,7 @@ var ScreenshotController = {
 
     read: function (req, res) {
         var _gp = CH.m2v(req);
-        var urlID = _gp.id;
+        var urlID = _gp._id;
         var file = "screenshots/" + urlID;
         var projectID = _gp.projectID;
 
@@ -108,10 +108,44 @@ var ScreenshotController = {
 
     ,
 
+    responseFile: function (req, res) {
+        var _gp = CH.m2v(req);
+        var screenshotID = _gp._id;
+
+        Screenshot.findOne({_id: screenshotID}, function (err, screenshot) {
+            if (err) {
+                console.log(err);
+            }
+            if (screenshot) {
+                var filePath = screenshot.fileURL;
+
+                fs.exists(filePath, function (exists) {
+                    if (exists) {
+                        res.writeHead(200, {
+                            "Content-Type": "image/png"
+                        });
+                        fs.createReadStream(filePath).pipe(res);
+                    } else {
+                        res.writeHead(400, {"Content-Type": "text/plain"});
+                        res.end("ERROR File does NOT Exists");
+                    }
+                });
+            }
+        });
+    }
+
+    ,
+
+    getFile: function (req, res) {
+        var _gp = CH.m2v(req);
+
+    }
+
+    ,
+
     getScreenshotsByProject: function (req, res) {
         var _gp = CH.m2v(req);
         var projectID = _gp.projectID;
-
 
     }
 }

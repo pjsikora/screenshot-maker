@@ -13,13 +13,13 @@ Here is the list of basic routes
 ## List of screenshots (/list)
 List of all done screenshots
 ```
-localhost:8888/list
+/list
 ```
 
 ## List of screenshots (/screenshot)
 Make screenshot
 ```
-localhost:8888/list?url=your_url
+/list?url=your_url
 ```
 
 Example
@@ -33,10 +33,10 @@ localhost:8888/list?url=fedojo.com
 
 ### List projects
 ```
-http://localhost:8888/api/project/list
+/api/project/list
 ```
 
 ### Create project
 ```
-http://localhost:8888/api/project/create?name=First&createdBy=Piotr
+/api/project/create?name=First&createdBy=Piotr
 ```
