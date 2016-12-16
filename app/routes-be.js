@@ -12,8 +12,10 @@ var ScreenshotCtrl = require('./controllers/ScreenshotsController');
 var ProjectCtrl = require('./controllers/ProjectsController');
 var PointController = require('./controllers/PointController');
 var UserController = require('./controllers/UserController');
+var HTMLValidationController = require('./controllers/HTMLValidationController');
 
 router.get('/authenticate', UserController.authenticate);
+router.get('/validation/html', HTMLValidationController.create);
 
 
 router.use(Auth.loginCheck);
