@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
+    "cheerio": "^0.22.0",
     "compression": "^1.6.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
@@ -26,6 +27,7 @@
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
+    "request": "^2.79.0",
     "webshot": "^0.18.0"
   }
 }
