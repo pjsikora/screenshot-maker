@@ -16,9 +16,10 @@ var HTMLValidationController = require('./controllers/HTMLValidationController')
 var SEOChecks = require('./controllers/SEOChecksController');
 
 router.get('/authenticate', UserController.authenticate);
+
 router.get('/validation/html', HTMLValidationController.create);
 router.get('/validation/seo', SEOChecks.create);
-
+router.get('/validation/getlinks', SEOChecks.getLinksFromPage);
 
 router.use(Auth.loginCheck);
 

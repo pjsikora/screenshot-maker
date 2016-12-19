@@ -3,14 +3,14 @@ var cheerio = require("cheerio");
 var CH = require('../helpers/ControllerHelper');
 
 var HTMLValidationController = {
-    create: function(req, res) {
+    create: function (req, res) {
         var _gp = CH.m2v(req);
         var url = _gp.url;
 
         // var options = {url: req.param("url"), format: 'json'};
         request({
             uri: url,
-        }, function(error, response, body) {
+        }, function (error, response, body) {
             // console.log(body);
 
             var $ = cheerio.load(body);
@@ -20,29 +20,26 @@ var HTMLValidationController = {
 
             response['meta'] = HTMLValidationController.checkMeta($);
             response['links'] = HTMLValidationController.checkLinks($);
+            response['keywords'] = HTMLValidationController.checkMetaKeywords($);
+            response['title'] = HTMLValidationController.checkTitle($);
+            response['images'] = HTMLValidationController.checkImages($);
 
             res.json({body: response});
-
         });
-
-        // console.log(req.param("url"));
-
-
-            // res.json(data);
     }
 
     ,
 
-    checkMeta: function($) {
+    checkMeta: function ($) {
         var meta = [];
 
-        $('meta').each(function(el) {
+        $('meta').each(function () {
             var link = $(this);
             var text = link.text();
             var content = link.attr("content");
             var name = link.attr("name");
 
-            var el = { name: name, content: content };
+            var el = {name: name, content: content};
 
             meta.push(el)
         })
@@ -52,40 +49,68 @@ var HTMLValidationController = {
 
     ,
 
-    checkMetaKeywords: function($) {
-        
+    checkMetaKeywords: function ($) {
+        var keywords = [];
+
+        $('meta[name="keywords"]').each(function () {
+            var element = $(this);
+            var content = element.attr("content");
+            var name = element.attr("name");
+
+            var el = {content: content};
+
+            keywords.push(el)
+        })
+
+        return keywords;
     }
 
     ,
 
-    checkH1: function(req, res) {
-        $('h1').each(function(el) {
+    checkTitle: function ($) {
+        var title = [];
+
+        $('title').each(function () {
+            var element = $(this);
+            var content = element.text();
+
+            var el = {content: content};
+
+            title.push(el)
+        })
+
+        return title;
+    }
+
+    ,
+
+    checkH1: function (req, res) {
+        var h1 = [];
+
+        $('h1').each(function (el) {
             var link = $(this);
             var text = link.text();
-            var content = link.attr("content");
-            var name = link.attr("name");
+            var el = {content: text};
 
-
-            console.log(content + ' ' + name);
+            h1.push(el)
         })
     }
 
     ,
 
-    robotsTxt: function(req, res) {
+    robotsTxt: function (req, res) {
         // Check if exists
         // Check XML sitemap
     }
 
     ,
 
-    checkJS: function(req, res) {
-        $('script').each(function(el) {
+    checkJS: function (req, res) {
+        $('script').each(function (el) {
             var link = $(this);
             var text = link.text();
             var content = link.attr("content");
             var name = link.attr("name");
-
 
             console.log(content + ' ' + name);
         })
@@ -93,13 +118,12 @@ var HTMLValidationController = {
 
     ,
 
-    checkCSS: function(req, res) {
-        $('link').each(function(el) {
+    checkCSS: function (req, res) {
+        $('link').each(function (el) {
             var link = $(this);
             var text = link.text();
             var content = link.attr("content");
             var name = link.attr("name");
-
 
             console.log(content + ' ' + name);
         })
@@ -107,10 +131,10 @@ var HTMLValidationController = {
 
     ,
 
-    checkLinks: function($) {
+    checkLinks: function ($) {
         var links = [];
 
-        $('a').each(function(el) {
+        $('a').each(function (el) {
             var link = $(this);
             var text = link.text();
             var href = link.attr("href");
@@ -124,25 +148,53 @@ var HTMLValidationController = {
 
     ,
 
-    checkImages: function() {
+    checkImages: function ($) {
+        var images = [];
 
-        $('img').each(function() {
-            var link = $(this);
-            var text = link.text();
-            var alt = link.attr("alt");
+        $('img').each(function () {
+            var element = $(this);
+            var source = element.attr('src');
+            var alt = element.attr('alt');
+            var el = {source: source, alt: alt};
 
-            console.log(content + ' ' + name);
+            images.push(el);
         })
+
+        return images;
     }
 
     ,
 
-    keywordsCoverage: function() {}
+    keywordsCoverage: function () {
+    }
 
     ,
 
-    contents: function() {
+    contents: function () {
 
+    }
+
+    ,
+
+    getLinksFromPage: function (req, res) {
+        var _gp = CH.m2v(req);
+        var url = _gp.url;
+        var linksArray = [];
+
+        request({
+            uri: url,
+        }, function (error, response, body) {
+            var $ = cheerio.load(body);
+
+            $('a').each(function (el) {
+                var link = $(this);
+                var href = link.attr("href");
+
+                linksArray.push(link);
+            })
+
+            res.json({body: response});
+        });
     }
 
 }
