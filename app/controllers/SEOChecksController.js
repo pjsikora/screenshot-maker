@@ -190,10 +190,10 @@ var HTMLValidationController = {
                 var link = $(this);
                 var href = link.attr("href");
 
-                linksArray.push(link);
+                linksArray.push(href);
             })
 
-            res.json({body: response});
+            res.json({body: linksArray});
         });
     }
 
