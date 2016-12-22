@@ -8,7 +8,7 @@ var AuthMiddleware = {
         if (token) {
             jwt.verify(token, CFG.secret, function (err, decoded) {
                 if (err) {
-                    return res.json({success: false, message: 'Failed to authenticate token.'});
+                    return res.json({success: false, message: 'Failed to authenticate token'});
                 } else {
                     req.decoded = decoded;
                     next();
@@ -17,7 +17,7 @@ var AuthMiddleware = {
         } else {
             return res.status(403).send({
                 success: false,
-                message: 'No token provided.'
+                message: 'No token'
             });
 
         }

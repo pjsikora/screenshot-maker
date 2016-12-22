@@ -3,21 +3,21 @@ var Project = require('../models/Project');
 
 var ProjectCtrl = {
     listAllUndeleted: function (req, res) {
-        Project.find({isDeleted: false}, function (err, points) {
+        Project.find({isDeleted: false}, function (err, projects) {
             if (err) {
                 console.log(err);
             } else {
-                res.json(points);
+                res.json({success: true, response: projects});
             }
         });
     },
 
     listAll: function (req, res) {
-        Project.find({}, function (err, points) {
+        Project.find({}, function (err, projects) {
             if (err) {
                 console.log(err);
             } else {
-                res.json(points);
+                res.json({success: true, response: projects});
             }
         });
     },
@@ -30,18 +30,19 @@ var ProjectCtrl = {
             if (err) {
                 console.log(err);
             } else {
-                res.json(projects);
+                res.json({success: true, response: projects});
             }
         });
     },
 
-
     create: function (req, res) {
         var _gp = CH.m2v(req);
+        var userID = _gp.userID;
         var project = new Project();
 
         project.name = _gp.name;
         project.isOpened = _gp.isOpened;
+        project.createdBy = _gp.userID;
 
         project.save(function (err, el) {
             if (err) {
