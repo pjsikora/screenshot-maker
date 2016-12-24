@@ -46,9 +46,9 @@ var ProjectCtrl = {
 
         project.save(function (err, el) {
             if (err) {
-                res.json({status: 'ERROR', error: JSON.stringify(err)});
+                res.json({status: 'ERROR', error: JSON.stringify(err), success: false});
             } else {
-                res.json({status: 'OK', _id: el._id});
+                res.json({status: 'OK', _id: el._id, success: true});
             }
         });
     },
